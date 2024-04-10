@@ -1,0 +1,13 @@
+###
+GET http://localhost:3001/api/helloWorld?hello=world&color=blue
+
+###
+POST http://localhost:3001/api/helloWorld?hello=world&color=blue
+Content-Type: application/json
+
+{
+  "id": 123,
+  "price": 1234,
+  "ts": "334123",
+  "value": "content"
+}

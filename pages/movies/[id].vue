@@ -1,6 +1,56 @@
+<script setup>
+const route = useRoute();
+// const {data} = await useAsyncData(() => {
+//   return $fetch(`http://www.omdbapi.com/?apikey=8e3f600b&i=${route.params.id}`);
+// }, {
+//   pick: ["Plot", "Title"],
+//
+//   // transform(data) {
+//   //   return {
+//   //     Plot: data.Plot,
+//   //     Title: data.Title
+//   //   }
+//     // return data.Title
+//   // }
+// });
+
+const {data, error} = await useFetch(
+    `http://www.omdbapi.com/?apikey=8e3f600b&i=${route.params.id}`,
+    // `https://httpbin.org/status/500`,
+    {
+      pick: ["Plot", "Title", "Error", 'Poster'],
+      // key: `/movies/${route.params.id}`,
+      // onResponse({request, response}) {
+      //   if (response._data.Error === "Incorrect IMDb ID.") {
+      //     showError({statusCode: 404, statusMessage: "Page Not Found"});
+      //   }
+      // },
+      // onResponseError() {
+      //   showError({statusCode: 500, statusMessage: "Oh noes!"})
+      // }
+    }
+);
+
+if (data.value.Error === "Incorrect IMDb ID.") {
+  showError({statusCode: 404, statusMessage: "Page Not Found"});
+}
+
+useHead({
+  title: data.value.Title,
+  meta: [
+    { name: "description", content: data.value.Plot },
+    { property: "og:description", content: data.value.Plot },
+    { property: "og:image", content: data.value.Poster },
+    { name: "twitter:card", content: 'summary_lage_image' },
+  ]
+
+})
+</script>
+
 <template>
   <div>
-    <h1>{{ $route.params.id }}</h1>
-<!--    http://localhost:3000/movies/123-->
+    <!--    <h1>{{ $route.params.id }}</h1>-->
+    <h1>{{ data }}</h1>
+    <!--    http://localhost:3000/movies/123-->
   </div>
 </template>
